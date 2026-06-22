@@ -10,8 +10,8 @@ import ssl
 from email.message import EmailMessage
 
 DATA_DIR = "data"
-USERS_FILE = os.path.join(DATA_DIR, "users.xlsx")
-ORDERS_FILE = os.path.join(DATA_DIR, "orders.xlsx")
+USERS_FILE = os.path.join(DATA_DIR, "users.csv")
+ORDERS_FILE = os.path.join(DATA_DIR, "orders.csv")
 ADMIN_EMAIL = "admin@adedgeos.com"
 ADMIN_PASSWORD = "admin123"
 SMTP_SERVER = "smtp.gmail.com"
@@ -46,7 +46,7 @@ def init_data():
                 "approval_status",
                 "registered_at",
             ]
-        ).to_excel(USERS_FILE, index=False)
+        ).to_csv(USERS_FILE, index=False, encoding="utf-8")
 
     if not os.path.exists(ORDERS_FILE):
         pd.DataFrame(
@@ -71,12 +71,12 @@ def init_data():
                 "status",
                 "created_at",
             ]
-        ).to_excel(ORDERS_FILE, index=False)
+        ).to_csv(ORDERS_FILE, index=False, encoding="utf-8")
 
 
 @st.cache_data(show_spinner=False)
 def load_users():
-    users = pd.read_excel(USERS_FILE)
+    users = pd.read_csv(USERS_FILE, encoding="utf-8")
     if "approved" in users.columns and "approval_status" not in users.columns:
         users = users.copy()
         users["approval_status"] = users["approved"].map({True: "Approved", False: "Pending"})
@@ -89,16 +89,16 @@ def load_users():
 
 @st.cache_data(show_spinner=False)
 def load_orders():
-    return pd.read_excel(ORDERS_FILE)
+    return pd.read_csv(ORDERS_FILE, encoding="utf-8")
 
 
 def save_users(df):
-    df.to_excel(USERS_FILE, index=False)
+    df.to_csv(USERS_FILE, index=False, encoding="utf-8")
     st.cache_data.clear()
 
 
 def save_orders(df):
-    df.to_excel(ORDERS_FILE, index=False)
+    df.to_csv(ORDERS_FILE, index=False, encoding="utf-8")
     st.cache_data.clear()
 
 
@@ -563,4 +563,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
