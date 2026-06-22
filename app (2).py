@@ -557,6 +557,9 @@ def main():
     """, unsafe_allow_html=True)
     
     init_data()
-    show_banner()                    
-    login_portal()__name__ == "__main__":
+    show_banner()
+    login_portal()
+
+
+if __name__ == "__main__":
     main()
